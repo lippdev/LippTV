@@ -1,0 +1,69 @@
+{
+  "name": "lipptv",
+  "version": "0.1.0",
+  "description": "Desktop IPTV and streaming player built with Electron, React and TypeScript.",
+  "main": "dist-electron/electron/main.js",
+  "author": "Open Source",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "concurrently -k \"tsc -p tsconfig.main.json --watch\" \"vite\" \"wait-on dist-electron/electron/main.js tcp:5173 && electron .\"",
+    "build": "npm run build:renderer && npm run build:main",
+    "build:renderer": "vite build",
+    "build:main": "tsc -p tsconfig.main.json",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.main.json --noEmit",
+    "preview": "vite preview",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.11.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "electron-store": "^10.0.1",
+    "fast-xml-parser": "^4.3.6",
+    "hls.js": "^1.6.16",
+    "mpegts.js": "^1.8.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.1",
+    "zustand": "^5.0.4"
+  },
+  "build": {
+    "appId": "com.lipptv.desktop",
+    "productName": "LippTV",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.4.1",
+    "concurrently": "^9.1.2",
+    "electron": "^35.2.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "wait-on": "^8.0.3"
+  }
+}
