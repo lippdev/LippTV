@@ -5,6 +5,7 @@ import { configurePlaybackSession } from "./sessionPlayback";
 import { logger } from "./utils/logger";
 
 const isDev = !app.isPackaged;
+const iconPath = path.join(app.getAppPath(), "assets", process.platform === "win32" ? "logo.ico" : "logo.png");
 
 async function createWindow() {
   const win = new BrowserWindow({
@@ -15,6 +16,7 @@ async function createWindow() {
     backgroundColor: "#07111f",
     frame: false,
     titleBarStyle: "hidden",
+    icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -23,12 +25,23 @@ async function createWindow() {
     }
   });
 
+  const emitMaximized = () => {
+    win.webContents.send("window:maximized-changed", win.isMaximized());
+  };
+
+  win.on("maximize", emitMaximized);
+  win.on("unmaximize", emitMaximized);
+  win.on("enter-full-screen", emitMaximized);
+  win.on("leave-full-screen", emitMaximized);
+
   if (isDev) {
     await win.loadURL("http://localhost:5173");
     win.webContents.openDevTools({ mode: "detach" });
   } else {
     await win.loadFile(path.join(app.getAppPath(), "dist", "index.html"));
   }
+
+  win.webContents.once("did-finish-load", emitMaximized);
 }
 
 app.whenReady().then(async () => {

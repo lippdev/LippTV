@@ -1,4 +1,4 @@
-import logoUrl from "../assets/LippTV.png";
+const logoUrl = new URL("../../../assets/logo.png", import.meta.url).href;
 
 type Props = {
   className?: string;

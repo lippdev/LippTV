@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Desktop IPTV and streaming player built with Electron, React and TypeScript.",
   "main": "dist-electron/electron/main.js",
-  "author": "Open Source",
+  "author": "Filipe Moreira",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -39,10 +39,12 @@
     "files": [
       "dist/**/*",
       "dist-electron/**/*",
+      "assets/**/*",
       "package.json"
     ],
     "asar": true,
     "win": {
+      "icon": "assets/logo.ico",
       "target": [
         "nsis"
       ],

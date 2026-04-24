@@ -27,7 +27,14 @@ const api = {
     ipcRenderer.invoke("playback:set", playback) as Promise<PlaybackState>,
   minimizeWindow: () => ipcRenderer.invoke("window:minimize") as Promise<void>,
   toggleMaximizeWindow: () => ipcRenderer.invoke("window:toggle-maximize") as Promise<boolean>,
-  closeWindow: () => ipcRenderer.invoke("window:close") as Promise<void>
+  closeWindow: () => ipcRenderer.invoke("window:close") as Promise<void>,
+  onMaximizedChange: (listener: (isMaximized: boolean) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, isMaximized: boolean) => listener(isMaximized);
+    ipcRenderer.on("window:maximized-changed", handler);
+    return () => {
+      ipcRenderer.removeListener("window:maximized-changed", handler);
+    };
+  }
 };
 
 contextBridge.exposeInMainWorld("lipptv", api);

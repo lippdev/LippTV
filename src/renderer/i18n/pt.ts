@@ -19,10 +19,19 @@ export const pt = {
     soon: "Em breve"
   },
   welcome: {
+    title: "Organize as suas playlists num só lugar",
     tagline: "Cliente IPTV para desktop",
     hasSourcesLead: "As suas fontes estão prontas. Pode adicionar outra lista ou entrar na app.",
+    savedSourcesTitle: "Playlists guardadas",
     addSource: "Adicionar fonte",
-    continueToApp: "Continuar para a app"
+    continueToApp: "Continuar para a app",
+    sidebarSection: "Biblioteca",
+    sidebarBrowse: "Sistema",
+    sidebarPlaylists: "Playlists",
+    sidebarTitle: "Estado da biblioteca",
+    sidebarEmpty: "Sem fontes importadas",
+    sidebarSources: "fontes",
+    sidebarReady: "Tudo pronto para navegar"
   },
   theme: {
     light: "Modo claro",
@@ -45,12 +54,12 @@ export const pt = {
     playlistUrl: "URL da lista",
     selectFile: "Escolher ficheiro local",
     import: "Importar",
-    importing: "A importar…",
+    importing: "A importar...",
     epgUrl: "URL do EPG (XMLTV, opcional)",
     epgHint: "Guia de programação; associado a esta fonte após importar."
   },
   live: {
-    channelSearch: "Pesquisar canais…",
+    channelSearch: "Pesquisar canais...",
     promoTitle: "Mais de 1000+ canais",
     promoSubtitle: "Explore categorias e reproduza em qualidade.",
     channelInfo: "Informações do canal",
@@ -58,22 +67,22 @@ export const pt = {
     epgSectionNext: "A seguir",
     remainingHint: "restantes",
     shortcuts: "Atalhos",
-    shortcutFullscreen: "F — ecrã inteiro",
-    shortcutMute: "M — silenciar",
-    shortcutNav: "Setas — navegar na lista",
+    shortcutFullscreen: "F - ecrã inteiro",
+    shortcutMute: "M - silenciar",
+    shortcutNav: "Setas - navegar na lista",
     quality: "Qualidade",
     source: "Fonte",
     statusOnline: "Online",
     statusLabel: "Estado"
   },
   catalog: {
-    search: "Pesquisar…",
+    search: "Pesquisar...",
     items: "itens",
     categories: "Categorias",
     allCategories: "Todas",
     selectChannel: "Escolha um canal",
     selectEpisode: "Escolha um episódio na lista à esquerda.",
-    episodesLoading: "A carregar episódios…",
+    episodesLoading: "A carregar episódios...",
     episodesError: "Não foi possível carregar episódios.",
     noEpisodes: "Sem episódios.",
     epgNow: "Agora",
@@ -90,9 +99,9 @@ export const pt = {
     statusReady: "Pronto",
     statusPlaying: "A reproduzir",
     statusPaused: "Em pausa",
-    statusBuffering: "A carregar buffer…",
+    statusBuffering: "A carregar buffer...",
     statusError: "Erro de reprodução",
-    statusReconnecting: "A restabelecer…",
+    statusReconnecting: "A restabelecer...",
     favorite: "Favorito"
   },
   library: {
