@@ -1,9 +1,9 @@
 {
   "name": "lipptv",
-  "version": "0.1.0",
-  "description": "Desktop IPTV and streaming player built with Electron, React and TypeScript.",
+  "version": "1.0.0",
+  "description": "Desktop IPTV and streaming player app.",
   "main": "dist-electron/electron/main.js",
-  "author": "Filipe Moreira",
+  "author": "lippdev",
   "license": "MIT",
   "private": true,
   "scripts": {
