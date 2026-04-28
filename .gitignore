@@ -31,3 +31,4 @@ Thumbs.db
 
 # Electron specific
 app/dist/
+.agent/

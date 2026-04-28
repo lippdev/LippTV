@@ -1,28 +1,28 @@
 # LippTV
 
-LippTV is a modern desktop IPTV and streaming player built with Electron, React and TypeScript. The goal is to provide a fast, stable and polished experience for users who want to organize and play their own authorized IPTV sources on Windows.
+LippTV é um player de IPTV e streaming moderno para desktop, construído com Electron, React e TypeScript. O objetivo é fornecer uma experiência rápida, estável e refinada para usuários que desejam organizar e reproduzir suas próprias fontes autorizadas de IPTV no Windows.
 
-> LippTV does not provide playlists, channels, movies, series, credentials or streaming content. The app is only a player/client for sources supplied by the user, who must have the legal right to access them.
+> O LippTV não fornece playlists, canais, filmes, séries, credenciais ou conteúdo de streaming. O aplicativo é apenas um reprodutor/cliente para fontes fornecidas pelo usuário, que deve ter o direito legal de acessá-las.
 
-## Highlights
+## Destaques
 
-- Desktop app for Windows powered by Electron.
-- Premium dark/light interface with custom title bar.
-- Internal web player focused on HLS/M3U8 playback.
-- Playlist import from M3U file or URL.
-- Initial connector structure for Xtream API and Stalker/MAG-compatible portals.
-- Live TV, Movies and Series organization.
-- Favorites, playback history and playback preferences.
-- Fast search and category navigation.
-- Virtualized lists for large catalogs.
-- Local persistence with Electron-friendly storage.
-- Safer Electron defaults with isolated renderer and preload bridge.
+- Aplicativo Desktop para Windows desenvolvido com Electron.
+- Interface premium (modo dark/light) com barra de título customizada.
+- Reprodutor web interno focado em reprodução de HLS/M3U8.
+- Importação de playlist a partir de arquivo M3U ou URL.
+- Estrutura inicial de conexão para API Xtream e portais compatíveis com Stalker/MAG.
+- Organização em TV Ao Vivo, Filmes e Séries.
+- Favoritos, histórico de reprodução e preferências.
+- Busca rápida e navegação por categorias.
+- Listas virtualizadas para catálogos extensos.
+- Persistência local segura.
+- Padrões de segurança do Electron com renderizador isolado (preload bridge).
 
-## Screenshots
+## Telas
 
-Screenshots will be added soon. If you are contributing UI improvements, feel free to open a PR adding updated images from the latest build.
+As capturas de tela serão adicionadas em breve. Se você estiver contribuindo com melhorias na interface do usuário, sinta-se à vontade para abrir um PR adicionando imagens atualizadas da versão mais recente.
 
-## Tech Stack
+## Tecnologias Utilizadas
 
 - Electron
 - React
@@ -35,181 +35,93 @@ Screenshots will be added soon. If you are contributing UI improvements, feel fr
 - electron-store
 - electron-builder
 
-## Project Goals
+## Objetivos do Projeto
 
-LippTV is designed around three priorities:
+O LippTV é projetado em torno de três prioridades:
 
-- Performance: large IPTV catalogs should not freeze the interface.
-- Stability: playback errors should be handled gracefully whenever possible.
-- UX quality: the app should feel like a real streaming product, not a generic playlist viewer.
+- **Performance**: grandes catálogos de IPTV não devem travar a interface.
+- **Estabilidade**: erros de reprodução devem ser tratados de forma suave sempre que possível.
+- **Qualidade de UX**: o aplicativo deve parecer um produto de streaming real (premium), não um visualizador genérico de listas.
 
-## Architecture
+## Como Funciona
 
-```text
-LippTV/
-|-- electron/
-|   |-- services/
-|   |   |-- connectors/
-|   |   |-- importService.ts
-|   |   `-- store.ts
-|   |-- utils/
-|   |-- workers/
-|   |-- ipc.ts
-|   |-- main.ts
-|   `-- preload.ts
-|-- src/
-|   |-- renderer/
-|   |   |-- assets/
-|   |   |-- components/
-|   |   |-- hooks/
-|   |   |-- i18n/
-|   |   |-- lib/
-|   |   |-- pages/
-|   |   |-- stores/
-|   |   |-- App.tsx
-|   |   |-- main.tsx
-|   |   `-- styles.css
-|   `-- shared/
-|-- index.html
-|-- package.json
-|-- tsconfig.app.json
-|-- tsconfig.main.json
-`-- vite.config.ts
-```
+O processo principal do Electron é dono da janela nativa do desktop, dos handlers de IPC, da persistência local e do trabalho pesado de importação. O renderizador é um aplicativo React responsável pela navegação, interface do catálogo, controles de reprodução e experiência do usuário.
 
-## How It Works
+Listas de reprodução grandes são processadas fora do caminho crítico da interface do usuário, e a renderização do catálogo usa listas virtualizadas para que milhares de entradas possam ser navegadas sem renderizar tudo de uma vez.
 
-The Electron main process owns the native desktop window, IPC handlers, local persistence and heavy import work. The renderer is a React app responsible for navigation, catalog UI, playback controls and user experience.
+## Fontes Suportadas
 
-Large playlists are parsed outside the critical UI path, and catalog rendering uses virtualized lists so thousands of entries can be browsed without rendering everything at once.
+- Playlists M3U a partir de arquivo.
+- Playlists M3U a partir de URL.
+- Transmissões diretas HLS/M3U8.
+- Contas compatíveis com API Xtream (quando autorizadas pelo usuário).
+- Portais compatíveis com Stalker/MAG (quando autorizados pelo usuário).
 
-## Supported Sources
+## Começando
 
-- M3U playlists from file.
-- M3U playlists from URL.
-- Direct HLS/M3U8 streams.
-- Xtream API-compatible accounts, when authorized by the user.
-- Stalker/MAG-compatible portals, when authorized by the user.
+### Requisitos
 
-Some providers use non-standard formats, custom headers, tokenized URLs or anti-hotlinking behavior. Compatibility can vary and should be improved through provider-agnostic fixes, not source-specific bypasses.
+- Node.js 20 ou superior.
+- npm 10 ou superior.
+- Windows é o alvo principal no momento.
 
-## Getting Started
-
-### Requirements
-
-- Node.js 20 or newer.
-- npm 10 or newer.
-- Windows is the primary target right now.
-
-### Install
+### Instalação
 
 ```bash
 npm install
 ```
 
-### Run in Development
+### Rodar em Desenvolvimento
 
 ```bash
 npm run dev
 ```
 
-This starts TypeScript watch mode for Electron, Vite for the renderer and then opens the desktop app.
+Isso inicia o modo watch do TypeScript para o Electron, o Vite para o renderizador e, em seguida, abre o aplicativo de desktop.
 
-### Type Check
+### Checagem de Tipos
 
 ```bash
 npm run typecheck
 ```
 
-### Production Build
+### Build de Produção
 
 ```bash
 npm run build
 ```
 
-### Package App
+### Empacotar o App
 
 ```bash
 npm run pack
 ```
 
-### Create Installer
+### Criar Instalador
 
 ```bash
 npm run dist
 ```
 
-Build artifacts are generated in `release/`.
+Os artefatos de build serão gerados na pasta `release/`.
 
-## Available Scripts
+## Scripts Disponíveis
 
-- `npm run dev`: starts the app in development mode.
-- `npm run build`: builds renderer and Electron main process.
-- `npm run build:renderer`: builds the Vite renderer.
-- `npm run build:main`: compiles Electron TypeScript files.
-- `npm run typecheck`: runs TypeScript checks for app and main process.
-- `npm run preview`: previews the Vite renderer build.
-- `npm run pack`: creates an unpacked desktop build.
-- `npm run dist`: creates a distributable installer with electron-builder.
+- `npm run dev`: inicia o aplicativo em modo de desenvolvimento.
+- `npm run build`: faz o build do renderizador e do processo principal do Electron.
+- `npm run build:renderer`: faz o build do renderizador Vite.
+- `npm run build:main`: compila os arquivos TypeScript do Electron.
+- `npm run typecheck`: executa as verificações do TypeScript.
+- `npm run preview`: visualiza o build do renderizador Vite.
+- `npm run pack`: cria uma compilação de desktop descompactada.
+- `npm run dist`: cria um instalador distribuível com electron-builder.
 
-## Security Notes
+## Uso Legal e Responsável
 
-LippTV follows safer Electron defaults:
+Este repositório é destinado ao acesso legítimo de mídia pessoal, assinaturas de IPTV autorizadas, testes internos e aprendizado de código aberto.
 
-- `nodeIntegration` is disabled.
-- `contextIsolation` is enabled.
-- Renderer access to native features goes through `preload.ts`.
-- IPC is exposed as a narrow API instead of giving the UI direct Node access.
-- Input sources should be validated and handled defensively.
+**Não use** o LippTV para acessar conteúdo sem permissão. Não abra issues solicitando playlists, conteúdo pirata, credenciais de provedor ou ajuda para contornar controles de acesso.
 
-For open source contributors: please avoid adding code that bypasses authorization systems, scrapes protected services, embeds third-party credentials or distributes copyrighted playlists.
+## Licença
 
-## Legal and Responsible Use
-
-This repository is intended for legitimate personal media access, authorized IPTV subscriptions, internal testing and open source learning.
-
-Do not use LippTV to access content without permission. Do not open issues requesting playlists, pirated content, provider credentials or help bypassing access controls.
-
-## Roadmap
-
-- Improve EPG ingestion and local caching.
-- Add smarter logo cache and fallback logo matching.
-- Expand Xtream API catalog sync.
-- Expand Stalker/MAG portal compatibility.
-- Add subtitle and audio track selection UI.
-- Add provider/profile management.
-- Add automated tests for malformed M3U files and large playlists.
-- Add CI for typecheck and build validation.
-- Add code splitting to reduce renderer bundle size.
-- Improve installer metadata, app icon and release workflow.
-
-## Contributing
-
-Contributions are welcome. The best areas to help right now are:
-
-- Playback stability across HLS variants.
-- UI polish and accessibility.
-- Large playlist performance.
-- Tests for parsers and connectors.
-- Documentation and screenshots.
-- Packaging and release automation.
-
-Before opening a PR, please run:
-
-```bash
-npm run typecheck
-npm run build
-```
-
-## Development Principles
-
-- Keep the renderer responsive.
-- Prefer background work for expensive parsing or catalog processing.
-- Keep Electron IPC explicit and narrow.
-- Avoid source-specific hacks when a general compatibility improvement is possible.
-- Treat malformed playlists and network failures as expected scenarios.
-- Keep UI components reusable and easy to evolve.
-
-## License
-
-MIT. See [LICENSE](LICENSE).
+MIT. Veja o arquivo [LICENSE](LICENSE).

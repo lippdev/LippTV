@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppSidebar } from "../components/AppSidebar";
 import { ImportPanel } from "../components/ImportPanel";
+import { Modal } from "../components/Modal";
 import { TitleBar } from "../components/TitleBar";
+import { PlusIcon, PlaylistsIcon } from "../components/icons";
 import { pt } from "../i18n/pt";
 import { useAppStore } from "../stores/appStore";
 
@@ -19,61 +21,63 @@ export function WelcomePage() {
       <div className="app-shell app-shell-welcome">
         <AppSidebar mode="welcome" current="welcome" />
 
-        <main className="content-panel welcome-content">
-          <div className="welcome-page-layout">
-            <section className="welcome-hero-panel">
-              <span className="eyebrow">{pt.welcome.sidebarPlaylists}</span>
-              <h1>{pt.welcome.title}</h1>
-              <p>{pt.welcome.tagline}</p>
-            </section>
-
-            <section className="panel welcome-main-panel">
-              <div className="panel-header welcome-panel-header">
-                <div>
-                  <h2>{hasLibraries ? pt.welcome.savedSourcesTitle : pt.import.title}</h2>
-                  <p>{hasLibraries ? pt.welcome.hasSourcesLead : pt.import.subtitle}</p>
-                </div>
+          <main className="content-panel welcome-content cinematic-brutalism-layout">
+            <div className="massive-bg-text">FONTES</div>
+            
+            <div className="cinematic-track-container">
+              <div className="cinematic-header">
+                <h2>{pt.welcome.savedSourcesTitle}</h2>
+                <p>{hasLibraries ? "Selecione uma playlist para começar ou adicione uma nova." : "Adicione sua primeira playlist para começar."}</p>
               </div>
 
               {!hasLibraries ? (
                 <ImportPanel className="welcome-import-panel" />
               ) : (
                 <div className="welcome-sources">
-                  <ul className="welcome-source-list">
+                  <div className="cinematic-track">
                     {snapshot.libraries.map((library) => (
-                      <li key={library.sourceId} className="welcome-source-row">
-                        <div className="welcome-source-meta">
+                      <div 
+                        key={library.sourceId} 
+                        className="playlist-card"
+                        onClick={() => navigate("/app/live")}
+                      >
+                        <div className="playlist-card-icon">
+                          <PlaylistsIcon />
+                        </div>
+                        <div className="playlist-card-meta">
                           <strong>{library.sourceName}</strong>
                           <span>
                             {library.items.length} {pt.catalog.items}
                           </span>
                         </div>
-                      </li>
+                      </div>
                     ))}
-                  </ul>
-                  {!showAddSource ? (
-                    <button
-                      type="button"
-                      className="ghost-button welcome-add-btn"
+                    
+                    <div 
+                      className="playlist-card playlist-card-add"
                       onClick={() => setShowAddSource(true)}
                     >
-                      {pt.welcome.addSource}
-                    </button>
-                  ) : (
-                    <ImportPanel className="welcome-import-panel" />
-                  )}
-                  <button
-                    type="button"
-                    className="primary-button welcome-continue"
-                    onClick={() => navigate("/app/live")}
+                      <div className="playlist-card-icon">
+                        <PlusIcon />
+                      </div>
+                      <div className="playlist-card-meta">
+                        <strong>Nova</strong>
+                        <span>Adicionar Fonte</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Modal 
+                    isOpen={showAddSource} 
+                    onClose={() => setShowAddSource(false)}
+                    title={pt.welcome.addSource}
                   >
-                    {pt.welcome.continueToApp}
-                  </button>
+                    <ImportPanel className="welcome-import-panel" />
+                  </Modal>
                 </div>
               )}
-            </section>
-          </div>
-        </main>
+            </div>
+          </main>
       </div>
     </div>
   );

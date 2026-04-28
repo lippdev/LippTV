@@ -80,45 +80,13 @@ export function AppSidebar({ mode, current }: AppSidebarProps) {
         )}
       </div>
 
-      <div className="sidebar-section">
-        <span className="sidebar-section-label">
-          {mode === "welcome" ? pt.welcome.sidebarBrowse : pt.navGroup.settings}
-        </span>
-        {mode === "welcome" ? (
-          <>
-            <button type="button" className="nav-link nav-link-disabled">
-              <HomeIcon />
-              <span>{pt.nav.home}</span>
-            </button>
-            <button type="button" className="nav-link nav-link-disabled">
-              <GearIcon />
-              <span>{pt.nav.settings}</span>
-            </button>
-          </>
-        ) : (
-          <>
-            <NavLink to="/app/library" className={navClass}>
-              <PlaylistsIcon />
-              <span>{pt.nav.library}</span>
-            </NavLink>
-            <NavLink to="/app/settings" className={navClass}>
-              <GearIcon />
-              <span>{pt.nav.settings}</span>
-            </NavLink>
-          </>
-        )}
-      </div>
-
       <div className="sidebar-spacer" />
 
-      <div className="sidebar-card">
-        <div className="sidebar-card-icon">
-          <PlaylistsIcon />
-        </div>
-        <div className="sidebar-card-copy">
-          <strong>{mode === "welcome" ? pt.welcome.sidebarTitle : pt.library.title}</strong>
-          <span>{current === "welcome" ? currentPlaylistLabel : pt.welcome.sidebarReady}</span>
-        </div>
+      <div className="sidebar-section">
+        <NavLink to="/" className="nav-link" end>
+          <HomeIcon />
+          <span>Voltar ao menu</span>
+        </NavLink>
       </div>
     </aside>
   );

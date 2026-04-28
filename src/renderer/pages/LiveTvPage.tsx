@@ -140,75 +140,77 @@ export function LiveTvPage() {
 
   return (
     <div className="page live-mock-page">
-      <section className="panel live-mock-categories" id="categorias">
-        <div className="panel-header live-mock-cat-header">
-          <h2>{pt.catalog.categories}</h2>
-          <span className="icon-filter" aria-hidden>
-            <FilterIcon />
-          </span>
-        </div>
-        <div className="category-search-wrap">
-          <SearchIcon />
-          <input
-            value={categoryQuery}
-            onChange={(event) => setCategoryQuery(event.target.value)}
-            placeholder="Filtrar categorias"
-          />
-        </div>
-        <div className="category-list category-list-mock">
-          {visibleCategories.map((cat) => {
-            const count =
-              cat === "__all__" ? rows.length : categoryCounts.get(cat) ?? 0;
-            const label = cat === "__all__" ? pt.catalog.allCategories : cat;
-            return (
-              <button
-                key={cat}
-                type="button"
-                className={cat === category ? "category-pill-mock active" : "category-pill-mock"}
-                onClick={() => setCategory(cat)}
-              >
-                <span className="category-pill-label">{label}</span>
-                <span className="category-pill-count">{count}</span>
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="panel live-mock-channels">
-        <div className="panel-header live-mock-ch-head">
-          <div>
-            <h2>{pt.nav.live}</h2>
-            <p className="live-count-line">
-              <span className="live-count-num">{filtered.length}</span> {pt.catalog.items}
-            </p>
-          </div>
-          <div className="live-search-wrap">
-            <span className="live-search-icon" aria-hidden>
-              <SearchIcon />
+      <div className="live-sidebar-column">
+        <section className="panel live-mock-categories" id="categorias">
+          <div className="panel-header live-mock-cat-header">
+            <h2>{pt.catalog.categories}</h2>
+            <span className="icon-filter" aria-hidden>
+              <FilterIcon />
             </span>
+          </div>
+          <div className="category-search-wrap">
+            <SearchIcon />
             <input
-              className="search-input live-search-input"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={pt.live.channelSearch}
+              value={categoryQuery}
+              onChange={(event) => setCategoryQuery(event.target.value)}
+              placeholder="Filtrar categorias"
             />
           </div>
-        </div>
-        <LibraryVirtualList
-          variant="live"
-          items={items}
-          activeId={selectedItem?.id}
-          onSelect={(it) => {
-            debugLogInfo("LiveTV", "clicou canal", {
-              id: it.id,
-              name: it.name,
-              hasStream: Boolean(it.streamUrl)
-            });
-            setSelectedItem(it);
-          }}
-        />
-      </section>
+          <div className="category-list category-list-mock">
+            {visibleCategories.map((cat) => {
+              const count =
+                cat === "__all__" ? rows.length : categoryCounts.get(cat) ?? 0;
+              const label = cat === "__all__" ? pt.catalog.allCategories : cat;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  className={cat === category ? "category-pill-mock active" : "category-pill-mock"}
+                  onClick={() => setCategory(cat)}
+                >
+                  <span className="category-pill-label">{label}</span>
+                  <span className="category-pill-count">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="panel live-mock-channels">
+          <div className="panel-header live-mock-ch-head">
+            <div>
+              <h2>{pt.nav.live}</h2>
+              <p className="live-count-line">
+                <span className="live-count-num">{filtered.length}</span> {pt.catalog.items}
+              </p>
+            </div>
+            <div className="live-search-wrap">
+              <span className="live-search-icon" aria-hidden>
+                <SearchIcon />
+              </span>
+              <input
+                className="search-input live-search-input"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={pt.live.channelSearch}
+              />
+            </div>
+          </div>
+          <LibraryVirtualList
+            variant="live"
+            items={items}
+            activeId={selectedItem?.id}
+            onSelect={(it) => {
+              debugLogInfo("LiveTV", "clicou canal", {
+                id: it.id,
+                name: it.name,
+                hasStream: Boolean(it.streamUrl)
+              });
+              setSelectedItem(it);
+            }}
+          />
+        </section>
+      </div>
 
       <section className="panel live-mock-player-column">
         <PlayerView
