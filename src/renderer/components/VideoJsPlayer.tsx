@@ -34,9 +34,28 @@ function isHlsSource(url: string) {
   return clean.endsWith(".m3u8") || url.toLowerCase().includes("m3u8");
 }
 
+// Only treat as MPEG-TS if it's clearly a live endpoint (/live/) or ends with .ts
+// Do NOT match /movie/ or /series/ — those use different containers
 function isMpegTsSource(url: string) {
   const clean = url.split("?")[0]?.toLowerCase() ?? "";
-  return clean.endsWith(".ts") || /\/live\/[^/]+\/[^/]+\/[^/?#]+($|[?#])/i.test(url);
+  if (clean.endsWith(".ts")) return true;
+  // Live Xtream pattern: /live/user/pass/id (no file extension)
+  return /\/live\/[^/]+\/[^/]+\/[^/.?#]+(\?|#|$)/i.test(url);
+}
+
+// Unsupported containers in Chromium/Electron — need to strip and retry
+const UNSUPPORTED_EXTENSIONS = /\.(mkv|avi|wmv|flv|mov|divx|xvid|rmvb|rm)$/i;
+
+function stripExtension(url: string): string | undefined {
+  try {
+    const parsed = new URL(url);
+    const newPath = parsed.pathname.replace(/\.[a-zA-Z0-9]{2,5}$/, "");
+    if (newPath === parsed.pathname) return undefined;
+    parsed.pathname = newPath;
+    return parsed.toString();
+  } catch {
+    return undefined;
+  }
 }
 
 function swapExtension(url: string, from: RegExp, to: string) {
@@ -52,14 +71,43 @@ function swapExtension(url: string, from: RegExp, to: string) {
   }
 }
 
-function buildPlaybackCandidates(url: string) {
-  const candidates = [url];
-  const ts = swapExtension(url, /\.m3u8$/i, ".ts");
-  const hls = swapExtension(url, /\.ts$/i, ".m3u8");
+function appendExtension(url: string, ext: string) {
+  try {
+    const parsed = new URL(url);
+    parsed.pathname = `${parsed.pathname}${ext}`;
+    return parsed.toString();
+  } catch {
+    return undefined;
+  }
+}
 
-  for (const candidate of [ts, hls]) {
-    if (candidate && !candidates.includes(candidate)) {
-      candidates.push(candidate);
+function buildPlaybackCandidates(url: string) {
+  const candidates: string[] = [url];
+  const clean = url.split("?")[0]?.toLowerCase() ?? "";
+
+  const isVod = clean.includes("/movie/") || clean.includes("/series/");
+  const hasNoExtension = !/\.[a-z0-9]{2,5}$/i.test(clean);
+
+  if (isVod) {
+    let stripped = url;
+    if (!hasNoExtension) {
+      const s = stripExtension(url);
+      if (s) stripped = s;
+    }
+
+    const mp4 = appendExtension(stripped, ".mp4");
+    const m3u8 = appendExtension(stripped, ".m3u8");
+
+    // Order of preference: original -> .mp4 -> stripped (server decide) -> .m3u8
+    for (const c of [mp4, stripped, m3u8]) {
+      if (c && !candidates.includes(c)) candidates.push(c);
+    }
+  } else {
+    // Existing .ts <-> .m3u8 fallback for Live TV
+    const ts = swapExtension(url, /\.m3u8$/i, ".ts");
+    const hls = swapExtension(url, /\.ts$/i, ".m3u8");
+    for (const c of [ts, hls]) {
+      if (c && !candidates.includes(c)) candidates.push(c);
     }
   }
 
@@ -550,8 +598,12 @@ export function VideoJsPlayer({
       </div>
       {diagnostic ? (
         <div className="player-diagnostic">
-          <strong>Imagem indisponivel neste stream</strong>
+          <strong>Stream indisponível</strong>
           <span>{diagnostic}</span>
+          <small className="player-diagnostic-hint">
+            Este conteúdo pode usar um codec não suportado (ex: HEVC/H.265, MKV, AVI).
+            Tente outra fonte ou verifique a compatibilidade da lista.
+          </small>
         </div>
       ) : null}
     </div>

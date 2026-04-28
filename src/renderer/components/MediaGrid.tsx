@@ -18,11 +18,20 @@ type Props = {
 };
 
 const CARD_MIN_WIDTH = 148;
-const ROW_HEIGHT = 292;
+const ROW_HEIGHT = 296;
 const GAP = 14;
 
 function matchHistory(history: HistoryRecord[], itemId: string, sourceId: string) {
   return history.find((entry) => entry.itemId === itemId && entry.sourceId === sourceId);
+}
+
+function PlayOverlayIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="play-icon">
+      <circle cx="12" cy="12" r="12" fill="rgba(0,0,0,0.55)" />
+      <path d="M10 8.5l6 3.5-6 3.5V8.5Z" fill="#fff" />
+    </svg>
+  );
 }
 
 export function MediaGrid({ entries, activeId, history, onSelect }: Props) {
@@ -71,13 +80,15 @@ export function MediaGrid({ entries, activeId, history, onSelect }: Props) {
                   h?.positionMs && item.streamUrl
                     ? Math.min(100, Math.round((h.positionMs / (1000 * 60 * 120)) * 100))
                     : 0;
+                const isActive = activeId === item.id;
 
                 return (
                   <button
                     key={`${sourceId}-${item.id}`}
                     type="button"
-                    className={clsx("media-card", { active: activeId === item.id })}
+                    className={clsx("media-card", { active: isActive })}
                     onClick={() => onSelect(item)}
+                    title={item.name}
                   >
                     <div className="media-card-poster">
                       {item.logo ? (
@@ -85,11 +96,17 @@ export function MediaGrid({ entries, activeId, history, onSelect }: Props) {
                       ) : (
                         <MediaLogo name={item.name} className="media-card-logo-fallback" />
                       )}
+                      <div className="media-card-overlay">
+                        <PlayOverlayIcon />
+                      </div>
                       {h?.positionMs ? <span className="media-card-resume">{pt.vod.resume}</span> : null}
+                      {isActive && (
+                        <span className="media-card-active-badge">▶ Assistindo</span>
+                      )}
                     </div>
                     <div className="media-card-meta">
                       <strong>{item.name}</strong>
-                      <span>{item.group}</span>
+                      {item.group ? <span>{item.group}</span> : null}
                     </div>
                     {progress > 0 ? (
                       <div className="media-card-progress">
